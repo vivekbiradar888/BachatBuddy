@@ -1,0 +1,88 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Lilita+One&display=swap');
+
+:root {
+  font-family: 'Inter', sans-serif;
+  color: #F7F4FF;
+  background: #100B24;
+
+  --bg: #100B24;
+  --bg-soft: #1A1035;
+  --violet: #7200FF;
+  --purple: #A855F7;
+  --lime: #C6FF00;
+  --white: #F7F4FF;
+  --muted: #B8AECF;
+
+  --font-hindi: 'Khand', sans-serif;
+--font-display: 'Bowlby One SC', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(114, 0, 255, 0.22),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(168, 85, 247, 0.14),
+      transparent 30%
+    ),
+    var(--bg);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  color: var(--bg);
+  background: var(--lime);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
