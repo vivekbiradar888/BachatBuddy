@@ -56,18 +56,20 @@ function Dashboard() {
           Welcome to
           <span> BachatBuddy.</span>
         </h1>
-        
-    
-<div className="dashboard-actions">
-  <Link to="/expenses" className="dashboard-action">
-    My Expenses <span>↗</span>
-  </Link>
 
-  <Link to="/income" className="dashboard-action">
-    My Income <span>↗</span>
-  </Link>
-</div>
+        <div className="dashboard-actions">
+          <Link to="/expenses" className="dashboard-action">
+            My Expenses <span>↗</span>
+          </Link>
 
+          <Link to="/income" className="dashboard-action">
+            My Income <span>↗</span>
+          </Link>
+
+          <Link to="/budget" className="dashboard-action">
+            My Budget <span>↗</span>
+          </Link>
+        </div>
 
         <p>
           Your smarter money journey starts here.
