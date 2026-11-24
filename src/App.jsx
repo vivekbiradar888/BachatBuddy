@@ -12,6 +12,7 @@ import Auth from './Auth.jsx'
 import Dashboard from './Dashboard.jsx'
 import Expenses from './Expenses.jsx'
 import Income from './Income.jsx'
+import Budget from './Budget.jsx'
 
 function ProtectedRoute({ children }) {
   const [loading, setLoading] = useState(true)
@@ -93,6 +94,14 @@ function App() {
   }
 />
 
+<Route
+  path="/budget"
+  element={
+    <ProtectedRoute>
+      <Budget />
+    </ProtectedRoute>
+  }
+/>
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
