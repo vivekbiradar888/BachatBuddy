@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from './supabase.js'
 import './Dashboard.css'
@@ -18,6 +18,14 @@ function Dashboard() {
 
   const [recentExpenses, setRecentExpenses] = useState([])
   const [loading, setLoading] = useState(true)
+
+  const [categoryExpenses, setCategoryExpenses] = useState([])
+
+const chartRef = useRef(null)
+const categoryRef = useRef(null)
+
+const [chartVisible, setChartVisible] = useState(false)
+const [categoryVisible, setCategoryVisible] = useState(false)
 
   useEffect(() => {
     async function loadDashboard() {
@@ -60,7 +68,7 @@ function Dashboard() {
 
         supabase
           .from('personal_expenses')
-          .select('amount, expense_date')
+          .select('amount, expense_date, category')
           .eq('user_id', user.id)
           .gte('expense_date', firstDay)
           .lte('expense_date', lastDate),
@@ -104,6 +112,8 @@ function Dashboard() {
 
         setExpenses(totalExpenses)
 
+setCategoryExpenses(expenseRecords)
+
         const weeklyTotals = [0, 0, 0, 0, 0]
 
         expenseRecords.forEach((item) => {
@@ -139,6 +149,62 @@ function Dashboard() {
 
     loadDashboard()
   }, [])
+
+  useEffect(() => {
+  if (loading) return
+
+  const chartElement = chartRef.current
+  const categoryElement = categoryRef.current
+
+  if (
+    window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches
+  ) {
+    setChartVisible(true)
+    setCategoryVisible(true)
+    return
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    setChartVisible(true)
+    setCategoryVisible(true)
+    return
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+
+        if (entry.target === chartElement) {
+          setChartVisible(true)
+        }
+
+        if (entry.target === categoryElement) {
+          setCategoryVisible(true)
+        }
+
+        observer.unobserve(entry.target)
+      })
+    },
+    {
+      threshold: 0.2,
+    }
+  )
+
+  if (chartElement) {
+    observer.observe(chartElement)
+  }
+
+  if (categoryElement) {
+    observer.observe(categoryElement)
+  }
+
+  return () => {
+    observer.disconnect()
+  }
+}, [loading])
 
   async function handleLogout() {
     const { error } = await supabase.auth.signOut()
@@ -179,6 +245,31 @@ function Dashboard() {
     ...weeklyExpenses,
     1
   )
+
+const categoryTotals = categoryExpenses.reduce(
+  (totals, expense) => {
+    const category = expense.category?.trim() || 'Other'
+    const amount = Number(expense.amount) || 0
+
+    totals[category] = (totals[category] || 0) + amount
+
+    return totals
+  },
+  {}
+)
+
+const categorySummary = Object.entries(categoryTotals)
+  .map(([category, amount]) => ({
+    category,
+    amount,
+    percentage:
+      expenses > 0
+        ? (amount / expenses) * 100
+        : 0,
+  }))
+  .sort((a, b) => b.amount - a.amount)
+
+const topCategory = categorySummary[0]
 
   const currentMonth = new Intl.DateTimeFormat('en-IN', {
     month: 'long',
@@ -314,7 +405,7 @@ function Dashboard() {
               </article>
             </div>
 
-            <section className="dashboard-chart-card">
+            <section className="dashboard-chart-card" ref={chartRef}>
               <div className="dashboard-chart-heading">
                 <div>
                   <span className="dashboard-kicker">
@@ -356,8 +447,11 @@ function Dashboard() {
                           className={`weekly-chart-bar ${
                             amount > 0 ? 'has-expenses' : ''
                           }`}
-                          style={{
-                            height: `${barHeight}%`,
+                         style={{
+                            height: chartVisible
+                            ? `${barHeight}%`
+                            : '0%',
+                            transitionDelay: `${index * 100}ms`,
                           }}
                         />
                       </div>
@@ -377,6 +471,81 @@ function Dashboard() {
                 </p>
               )}
             </section>
+
+            {/* Spending by Category */}
+<section
+  className="dashboard-category-card"
+  ref={categoryRef}
+>
+  <div className="dashboard-category-heading">
+    <div>
+      <span className="dashboard-kicker">
+        SPENDING BREAKDOWN
+      </span>
+
+      <h2>Spending by category</h2>
+
+      <p>
+        See where your money goes this month.
+      </p>
+    </div>
+
+    {topCategory && expenses > 0 && (
+      <div className="category-top-spending">
+        <span>Top spending</span>
+        <strong>{topCategory.category}</strong>
+        <span>
+          {formatMoney(topCategory.amount)}
+        </span>
+      </div>
+    )}
+  </div>
+
+  {categorySummary.length === 0 ? (
+    <div className="category-empty">
+      <p>No category data yet.</p>
+      <span>
+        Add an expense to see your spending breakdown.
+      </span>
+    </div>
+  ) : (
+    <div className="category-list">
+      {categorySummary.map((item, index) => (
+        <article
+          className="category-item"
+          key={item.category}
+        >
+          <div className="category-item-heading">
+            <div className="category-item-details">
+              <strong>{item.category}</strong>
+              <span>
+                {item.percentage.toFixed(1)}% of spending
+              </span>
+            </div>
+
+            <strong className="category-item-amount">
+              {formatMoney(item.amount)}
+            </strong>
+          </div>
+
+          <div className="category-progress-track">
+            <div
+              className={`category-progress-fill ${
+                index === 0 ? 'category-progress-top' : ''
+              }`}
+              style={{
+                width: categoryVisible
+                  ? `${item.percentage}%`
+                  : '0%',
+                transitionDelay: `${index * 100}ms`,
+              }}
+            />
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+</section>
 
             {/* Recent Transactions */}
             <section className="dashboard-recent-card">
