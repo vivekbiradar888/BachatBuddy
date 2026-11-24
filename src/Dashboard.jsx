@@ -11,9 +11,12 @@ function Dashboard() {
   const [income, setIncome] = useState(0)
   const [expenses, setExpenses] = useState(0)
   const [budget, setBudget] = useState(0)
+
   const [weeklyExpenses, setWeeklyExpenses] = useState([
     0, 0, 0, 0, 0,
   ])
+
+  const [recentExpenses, setRecentExpenses] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -46,6 +49,7 @@ function Dashboard() {
         incomeResult,
         expensesResult,
         budgetResult,
+        recentResult,
       ] = await Promise.all([
         supabase
           .from('personal_income')
@@ -67,6 +71,14 @@ function Dashboard() {
           .eq('user_id', user.id)
           .eq('month', firstDay)
           .maybeSingle(),
+
+        supabase
+          .from('personal_expenses')
+          .select('id, title, category, amount, expense_date')
+          .eq('user_id', user.id)
+          .order('expense_date', { ascending: false })
+          .order('created_at', { ascending: false })
+          .limit(5),
       ])
 
       if (incomeResult.error) {
@@ -92,13 +104,13 @@ function Dashboard() {
 
         setExpenses(totalExpenses)
 
-        // Calculate expenses for each week of the month
         const weeklyTotals = [0, 0, 0, 0, 0]
 
         expenseRecords.forEach((item) => {
           if (!item.expense_date) return
 
           const day = Number(item.expense_date.split('-')[2])
+
           const weekIndex = Math.min(
             Math.floor((day - 1) / 7),
             4
@@ -114,6 +126,12 @@ function Dashboard() {
         console.error(budgetResult.error)
       } else {
         setBudget(Number(budgetResult.data?.amount || 0))
+      }
+
+      if (recentResult.error) {
+        console.error(recentResult.error)
+      } else {
+        setRecentExpenses(recentResult.data || [])
       }
 
       setLoading(false)
@@ -142,6 +160,19 @@ function Dashboard() {
       currency: 'INR',
       maximumFractionDigits: 0,
     }).format(amount)
+  }
+
+  function formatDate(date) {
+    if (!date) return ''
+
+    return new Date(`${date}T00:00:00`).toLocaleDateString(
+      'en-IN',
+      {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }
+    )
   }
 
   const maximumWeeklyExpense = Math.max(
@@ -344,6 +375,60 @@ function Dashboard() {
                   No expenses recorded this month yet.
                   Add an expense to see your spending chart.
                 </p>
+              )}
+            </section>
+
+            {/* Recent Transactions */}
+            <section className="dashboard-recent-card">
+              <div className="dashboard-recent-heading">
+                <div>
+                  <span className="dashboard-kicker">
+                    YOUR LATEST ACTIVITY
+                  </span>
+                  <h2>Recent transactions</h2>
+                </div>
+
+                <Link
+                  to="/expenses"
+                  className="recent-view-all"
+                >
+                  View all ↗
+                </Link>
+              </div>
+
+              {recentExpenses.length === 0 ? (
+                <div className="recent-empty">
+                  <p>No transactions yet.</p>
+                  <span>
+                    Your recent expenses will appear here.
+                  </span>
+                </div>
+              ) : (
+                <div className="recent-expense-list">
+                  {recentExpenses.map((expense) => (
+                    <article
+                      className="recent-expense-item"
+                      key={expense.id}
+                    >
+                      <div className="recent-expense-icon">
+                        ↗
+                      </div>
+
+                      <div className="recent-expense-details">
+                        <strong>{expense.title}</strong>
+                        <span>
+                          {expense.category || 'Other'}
+                          {' · '}
+                          {formatDate(expense.expense_date)}
+                        </span>
+                      </div>
+
+                      <strong className="recent-expense-amount">
+                        -{formatMoney(Number(expense.amount))}
+                      </strong>
+                    </article>
+                  ))}
+                </div>
               )}
             </section>
           </>
