@@ -11,6 +11,9 @@ function Dashboard() {
   const [income, setIncome] = useState(0)
   const [expenses, setExpenses] = useState(0)
   const [budget, setBudget] = useState(0)
+  const [weeklyExpenses, setWeeklyExpenses] = useState([
+    0, 0, 0, 0, 0,
+  ])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -53,7 +56,7 @@ function Dashboard() {
 
         supabase
           .from('personal_expenses')
-          .select('amount')
+          .select('amount, expense_date')
           .eq('user_id', user.id)
           .gte('expense_date', firstDay)
           .lte('expense_date', lastDate),
@@ -80,12 +83,31 @@ function Dashboard() {
       if (expensesResult.error) {
         console.error(expensesResult.error)
       } else {
-        const totalExpenses = (expensesResult.data || []).reduce(
+        const expenseRecords = expensesResult.data || []
+
+        const totalExpenses = expenseRecords.reduce(
           (total, item) => total + Number(item.amount),
           0
         )
 
         setExpenses(totalExpenses)
+
+        // Calculate expenses for each week of the month
+        const weeklyTotals = [0, 0, 0, 0, 0]
+
+        expenseRecords.forEach((item) => {
+          if (!item.expense_date) return
+
+          const day = Number(item.expense_date.split('-')[2])
+          const weekIndex = Math.min(
+            Math.floor((day - 1) / 7),
+            4
+          )
+
+          weeklyTotals[weekIndex] += Number(item.amount)
+        })
+
+        setWeeklyExpenses(weeklyTotals)
       }
 
       if (budgetResult.error) {
@@ -121,6 +143,16 @@ function Dashboard() {
       maximumFractionDigits: 0,
     }).format(amount)
   }
+
+  const maximumWeeklyExpense = Math.max(
+    ...weeklyExpenses,
+    1
+  )
+
+  const currentMonth = new Intl.DateTimeFormat('en-IN', {
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date())
 
   return (
     <main className="dashboard-page">
@@ -186,61 +218,135 @@ function Dashboard() {
             Loading your financial summary...
           </p>
         ) : (
-          <div className="dashboard-summary-grid">
-            <article className="dashboard-summary-card">
-              <span className="summary-card-label">
-                Monthly income
-              </span>
-              <strong className="summary-card-value income-value">
-                {formatMoney(income)}
-              </strong>
-              <span className="summary-card-note">
-                Income recorded this month
-              </span>
-            </article>
+          <>
+            <div className="dashboard-summary-grid">
+              <article className="dashboard-summary-card">
+                <span className="summary-card-label">
+                  Monthly income
+                </span>
+                <strong className="summary-card-value income-value">
+                  {formatMoney(income)}
+                </strong>
+                <span className="summary-card-note">
+                  Income recorded this month
+                </span>
+              </article>
 
-            <article className="dashboard-summary-card">
-              <span className="summary-card-label">
-                Monthly expenses
-              </span>
-              <strong className="summary-card-value">
-                {formatMoney(expenses)}
-              </strong>
-              <span className="summary-card-note">
-                Expenses recorded this month
-              </span>
-            </article>
+              <article className="dashboard-summary-card">
+                <span className="summary-card-label">
+                  Monthly expenses
+                </span>
+                <strong className="summary-card-value">
+                  {formatMoney(expenses)}
+                </strong>
+                <span className="summary-card-note">
+                  Expenses recorded this month
+                </span>
+              </article>
 
-            <article className="dashboard-summary-card">
-              <span className="summary-card-label">
-                Budget remaining
-              </span>
-              <strong className={`summary-card-value ${
-                remainingBudget < 0 ? 'expense-value' : 'income-value'
-              }`}>
-                {formatMoney(remainingBudget)}
-              </strong>
-              <span className="summary-card-note">
-                {budget > 0
-                  ? 'From your monthly budget'
-                  : 'Set a budget to start tracking'}
-              </span>
-            </article>
+              <article className="dashboard-summary-card">
+                <span className="summary-card-label">
+                  Budget remaining
+                </span>
+                <strong
+                  className={`summary-card-value ${
+                    remainingBudget < 0
+                      ? 'expense-value'
+                      : 'income-value'
+                  }`}
+                >
+                  {formatMoney(remainingBudget)}
+                </strong>
+                <span className="summary-card-note">
+                  {budget > 0
+                    ? 'From your monthly budget'
+                    : 'Set a budget to start tracking'}
+                </span>
+              </article>
 
-            <article className="dashboard-summary-card">
-              <span className="summary-card-label">
-                Income minus expenses
-              </span>
-              <strong className={`summary-card-value ${
-                savings < 0 ? 'expense-value' : 'income-value'
-              }`}>
-                {formatMoney(savings)}
-              </strong>
-              <span className="summary-card-note">
-                Your monthly difference
-              </span>
-            </article>
-          </div>
+              <article className="dashboard-summary-card">
+                <span className="summary-card-label">
+                  Income minus expenses
+                </span>
+                <strong
+                  className={`summary-card-value ${
+                    savings < 0
+                      ? 'expense-value'
+                      : 'income-value'
+                  }`}
+                >
+                  {formatMoney(savings)}
+                </strong>
+                <span className="summary-card-note">
+                  Your monthly difference
+                </span>
+              </article>
+            </div>
+
+            <section className="dashboard-chart-card">
+              <div className="dashboard-chart-heading">
+                <div>
+                  <span className="dashboard-kicker">
+                    SPENDING ACTIVITY
+                  </span>
+                  <h2>Monthly expense chart</h2>
+                  <p>{currentMonth}</p>
+                </div>
+
+                <div className="chart-total">
+                  <span>Total spent</span>
+                  <strong>{formatMoney(expenses)}</strong>
+                </div>
+              </div>
+
+              <div className="weekly-chart">
+                {weeklyExpenses.map((amount, index) => {
+                  const barHeight =
+                    amount > 0
+                      ? Math.max(
+                          (amount / maximumWeeklyExpense) * 100,
+                          6
+                        )
+                      : 0
+
+                  return (
+                    <div
+                      className="weekly-chart-column"
+                      key={index}
+                    >
+                      <span className="weekly-chart-amount">
+                        {amount > 0
+                          ? formatMoney(amount)
+                          : '₹0'}
+                      </span>
+
+                      <div className="weekly-chart-bar-area">
+                        <div
+                          className={`weekly-chart-bar ${
+                            amount > 0 ? 'has-expenses' : ''
+                          }`}
+                          style={{
+                            height: `${barHeight}%`,
+                          }}
+                        />
+                      </div>
+
+                      <span className="weekly-chart-label">
+                        Week {index + 1}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+
+              {expenses === 0 && (
+                <p className="chart-empty-message">
+                  No expenses recorded this month yet.
+                  Add an expense to see your spending chart.
+                </p>
+              )}
+            </section>
+          </>
         )}
       </section>
     </main>
