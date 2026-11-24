@@ -83,6 +83,7 @@ function Budget() {
       .gte('expense_date', currentMonth)
       .lt('expense_date', nextMonth)
       .order('expense_date', { ascending: false })
+      .order('created_at', { ascending: false })
 
     if (expenseError) {
       setError(expenseError.message)
