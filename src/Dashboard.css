@@ -149,3 +149,101 @@
 .dashboard-action {
   margin-top: 0;
 }
+
+
+/* Monthly dashboard summary */
+
+.dashboard-summary {
+  width: min(1100px, 90%);
+  margin: 50px auto 80px;
+}
+
+.dashboard-summary-heading {
+  margin-bottom: 24px;
+}
+
+.dashboard-summary-heading h2 {
+  margin: 8px 0 0;
+  color: #f7f4ff;
+  font-size: clamp(24px, 3vw, 34px);
+}
+
+.dashboard-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.dashboard-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 26px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.035);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.dashboard-summary-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(168, 85, 247, 0.55);
+  background: rgba(114, 0, 255, 0.08);
+}
+
+.summary-card-label {
+  color: #bcb4d0;
+  font-size: 14px;
+}
+
+.summary-card-value {
+  color: #f7f4ff;
+  font-size: clamp(25px, 3vw, 36px);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.summary-card-note {
+  color: #9289aa;
+  font-size: 13px;
+}
+
+.income-value {
+  color: #c6ff00;
+}
+
+.expense-value {
+  color: #ff7b9c;
+}
+
+.dashboard-loading {
+  color: #bcb4d0;
+  padding: 30px 0;
+}
+
+@media (max-width: 600px) {
+  .dashboard-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-summary-card {
+    padding: 22px;
+  }
+
+  .dashboard-summary {
+    margin-top: 35px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-summary-card {
+    transition: none;
+  }
+
+  .dashboard-summary-card:hover {
+    transform: none;
+  }
+}
