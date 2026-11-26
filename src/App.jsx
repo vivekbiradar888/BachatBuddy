@@ -13,6 +13,12 @@ import Dashboard from './Dashboard.jsx'
 import Expenses from './Expenses.jsx'
 import Income from './Income.jsx'
 import Budget from './Budget.jsx'
+import Groups from './Groups.jsx'
+import CreateGroup from './CreateGroup.jsx'
+import GroupDetails from './GroupDetails.jsx'
+import JoinGroup from './JoinGroup.jsx'
+
+
 
 function ProtectedRoute({ children }) {
   const [loading, setLoading] = useState(true)
@@ -99,6 +105,45 @@ function App() {
   element={
     <ProtectedRoute>
       <Budget />
+    </ProtectedRoute>
+  }
+/>
+
+
+<Route
+  path="/groups"
+  element={
+    <ProtectedRoute>
+      <Groups />
+    </ProtectedRoute>
+  }
+/>
+
+
+<Route
+  path="/groups/create"
+  element={
+    <ProtectedRoute>
+      <CreateGroup />
+    </ProtectedRoute>
+  }
+/>
+
+
+<Route
+  path="/groups/:groupId"
+  element={
+    <ProtectedRoute>
+      <GroupDetails />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/groups/join"
+  element={
+    <ProtectedRoute>
+      <JoinGroup />
     </ProtectedRoute>
   }
 />

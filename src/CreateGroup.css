@@ -1,0 +1,196 @@
+
+.create-group-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background:
+    radial-gradient(
+      circle at 50% 15%,
+      rgba(114, 0, 255, 0.2),
+      transparent 38%
+    ),
+    #100b24;
+  color: #f7f4ff;
+}
+
+.create-group-back {
+  display: inline-block;
+  margin-bottom: 30px;
+  color: #b8afcf;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.create-group-back:hover {
+  color: #c6ff00;
+}
+
+.create-group-card {
+  width: 100%;
+  max-width: 520px;
+  margin: 30px auto;
+  padding: 42px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 26px;
+  background: linear-gradient(
+    145deg,
+    rgba(114, 0, 255, 0.1),
+    rgba(255, 255, 255, 0.025)
+  );
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+  animation: createGroupEnter 0.6s ease both;
+}
+
+.create-group-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(198, 255, 0, 0.25);
+  border-radius: 18px;
+  background: rgba(198, 255, 0, 0.08);
+  color: #c6ff00;
+  font-size: 28px;
+}
+
+.create-group-eyebrow {
+  margin: 0 0 10px;
+  color: #c6ff00;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.create-group-card h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.create-group-description {
+  margin: 14px 0 30px;
+  color: #b8afcf;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.create-group-card form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-group-card label {
+  margin-bottom: 10px;
+  color: #e9e2ff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.create-group-card input {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 13px;
+  outline: none;
+  background: rgba(16, 11, 36, 0.8);
+  color: #f7f4ff;
+  font-size: 15px;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.create-group-card input::placeholder {
+  color: #776c95;
+}
+
+.create-group-card input:focus {
+  border-color: #a855f7;
+  box-shadow: 0 0 0 4px rgba(114, 0, 255, 0.15);
+}
+
+.group-name-hint {
+  margin: 10px 0 24px;
+  color: #8f84ad;
+  font-size: 12px;
+}
+
+.create-group-card button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 13px;
+  background: #c6ff00;
+  color: #100b24;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.create-group-card button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #d7ff45;
+  box-shadow: 0 8px 25px rgba(198, 255, 0, 0.15);
+}
+
+.create-group-card button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.create-group-card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.create-group-error {
+  margin: 0 0 18px;
+  color: #ff8a9b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@keyframes createGroupEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .create-group-page {
+    padding: 24px 16px;
+  }
+
+  .create-group-card {
+    margin: 15px auto;
+    padding: 28px 22px;
+    border-radius: 22px;
+  }
+
+  .create-group-card h1 {
+    font-size: 29px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .create-group-card {
+    animation: none;
+  }
+
+  .create-group-card button,
+  .create-group-back {
+    transition: none;
+  }
+}

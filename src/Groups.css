@@ -1,0 +1,343 @@
+
+.groups-page {
+  min-height: 100vh;
+  padding: 40px;
+  color: #f7f4ff;
+  background:
+    radial-gradient(
+      circle at 85% 10%,
+      rgba(114, 0, 255, 0.16),
+      transparent 30%
+    ),
+    #100b24;
+}
+
+.groups-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.groups-eyebrow {
+  margin: 0 0 12px;
+  color: #c6ff00;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.groups-header h1 {
+  margin: 0;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+
+.groups-subtitle {
+  max-width: 500px;
+  margin: 14px 0 0;
+  color: #b8afcf;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.create-group-btn,
+.empty-create-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border: 1px solid rgba(198, 255, 0, 0.35);
+  border-radius: 14px;
+  background: #c6ff00;
+  color: #100b24;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 0 25px rgba(198, 255, 0, 0.08);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.create-group-btn span {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.create-group-btn:hover,
+.empty-create-btn:hover {
+  transform: translateY(-3px);
+  background: #d7ff45;
+  box-shadow: 0 8px 30px rgba(198, 255, 0, 0.18);
+}
+
+.create-group-btn:active,
+.empty-create-btn:active {
+  transform: scale(0.97);
+}
+
+.groups-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  padding: 40px 24px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(114, 0, 255, 0.08),
+    rgba(255, 255, 255, 0.02)
+  );
+  text-align: center;
+  animation: groupsFadeUp 0.7s ease both;
+}
+
+.groups-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(198, 255, 0, 0.25);
+  border-radius: 22px;
+  background: rgba(198, 255, 0, 0.08);
+  color: #c6ff00;
+  font-size: 34px;
+  box-shadow: 0 0 35px rgba(198, 255, 0, 0.06);
+}
+
+.groups-empty-state h2 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 750;
+}
+
+.groups-empty-state p {
+  max-width: 440px;
+  margin: 14px 0 26px;
+  color: #b8afcf;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.empty-create-btn {
+  padding: 13px 20px;
+}
+
+@keyframes groupsFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .groups-page {
+    padding: 24px 18px;
+  }
+
+  .groups-header {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 28px;
+  }
+
+  .create-group-btn {
+    width: 100%;
+  }
+
+  .groups-empty-state {
+    min-height: 320px;
+    padding: 30px 20px;
+  }
+
+  .groups-empty-state h2 {
+    font-size: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .groups-empty-state {
+    animation: none;
+  }
+
+  .create-group-btn,
+  .empty-create-btn {
+    transition: none;
+  }
+}
+
+
+.groups-list {
+  animation: groupsFadeUp 0.6s ease both;
+}
+
+.groups-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.groups-list-heading h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.groups-list-heading > span {
+  color: #b8afcf;
+  font-size: 13px;
+}
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(260px, 340px)
+  );
+  gap: 22px;
+}
+
+.group-card {
+  position: relative;
+  overflow: hidden;
+  padding: 26px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 22px;
+  background: linear-gradient(
+    145deg,
+    rgba(114, 0, 255, 0.12),
+    rgba(255, 255, 255, 0.025)
+  );
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.group-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #7200ff,
+    #c6ff00
+  );
+  opacity: 0.8;
+}
+
+.group-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(168, 85, 247, 0.55);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+}
+
+.group-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.group-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(198, 255, 0, 0.2);
+  border-radius: 15px;
+  background: rgba(198, 255, 0, 0.08);
+  color: #c6ff00;
+  font-size: 24px;
+}
+
+.group-owner-label {
+  padding: 7px 10px;
+  border: 1px solid rgba(198, 255, 0, 0.2);
+  border-radius: 20px;
+  background: rgba(198, 255, 0, 0.06);
+  color: #c6ff00;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.group-card h3 {
+  margin: 0;
+  color: #f7f4ff;
+  font-size: 23px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.group-card > p {
+  margin: 12px 0 24px;
+  color: #9f94bd;
+  font-size: 13px;
+}
+
+.group-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  border-top: 1px solid rgba(168, 85, 247, 0.15);
+  color: #c9bedf;
+  font-size: 13px;
+}
+
+.group-card-arrow {
+  color: #c6ff00;
+  font-size: 20px;
+  transition: transform 0.2s ease;
+}
+
+.group-card:hover .group-card-arrow {
+  transform: translate(3px, -3px);
+}
+
+@media (max-width: 700px) {
+  .groups-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .groups-list {
+    animation: none;
+  }
+
+  .group-card,
+  .group-card-arrow {
+    transition: none;
+  }
+}
+
+
+.group-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+  
