@@ -286,3 +286,51 @@
 .auth-success {
   color: #c6ff00;
 }
+
+
+/* Password show/hide toggle */
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 52px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 6px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #A855F7;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.password-toggle:hover {
+  background: rgba(168, 85, 247, 0.12);
+  color: #C6FF00;
+}
+
+.password-toggle svg {
+  width: 21px;
+  height: 21px;
+  pointer-events: none;
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid #A855F7;
+  outline-offset: 2px;
+}

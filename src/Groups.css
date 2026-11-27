@@ -341,3 +341,49 @@
   cursor: pointer;
 }
   
+
+/* Groups header action buttons */
+.groups-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.join-group-header-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 14px;
+  background: rgba(114, 0, 255, 0.08);
+  color: #F7F4FF;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.25s ease,
+              border-color 0.25s ease,
+              transform 0.25s ease;
+}
+
+.join-group-header-btn:hover {
+  background: rgba(114, 0, 255, 0.2);
+  border-color: #A855F7;
+  transform: translateY(-2px);
+}
+
+.join-group-header-btn span {
+  color: #C6FF00;
+}
+
+@media (max-width: 600px) {
+  .groups-header-actions {
+    width: 100%;
+  }
+
+  .groups-header-actions a {
+    flex: 1;
+  }
+}

@@ -25,17 +25,42 @@ function Groups() {
         return
       }
 
-      const { data, error: groupsError } = await supabase
-        .from('shared_groups')
-        .select('id, name, created_at')
-        .eq('created_by', user.id)
-        .order('created_at', { ascending: false })
+      
+const {
+  data: memberships,
+  error: membershipsError,
+} = await supabase
+  .from('shared_group_members')
+  .select('group_id')
+  .eq('user_id', user.id)
 
-      if (groupsError) {
-        setError(groupsError.message)
-      } else {
-        setGroups(data || [])
-      }
+if (membershipsError) {
+  setError(membershipsError.message)
+} else {
+  const groupIds = memberships.map(
+    (membership) => membership.group_id
+  )
+
+  if (groupIds.length === 0) {
+    setGroups([])
+  } else {
+    const {
+      data: groupsData,
+      error: groupsError,
+    } = await supabase
+      .from('shared_groups')
+      .select('id, name, created_at')
+      .in('id', groupIds)
+      .order('created_at', { ascending: false })
+
+    if (groupsError) {
+      setError(groupsError.message)
+    } else {
+      setGroups(groupsData || [])
+    }
+  }
+}
+
 
       setLoading(false)
     }
@@ -59,12 +84,23 @@ function Groups() {
           </p>
         </div>
 
-        <Link
-          to="/groups/create"
-          className="create-group-btn"
-        >
-          <span>＋</span> Create a Group
-        </Link>
+       
+<div className="groups-header-actions">
+  <Link
+    to="/groups/create"
+    className="create-group-btn"
+  >
+    <span>＋</span> Create a Group
+  </Link>
+
+  <Link
+    to="/groups/join"
+    className="join-group-header-btn"
+  >
+    Join Group <span>↗</span>
+  </Link>
+</div>
+
       </header>
 
       {loading ? (

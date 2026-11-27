@@ -1,0 +1,121 @@
+
+.join-group-page {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #F7F4FF;
+  text-align: center;
+  position: relative;
+}
+
+/* Main heading */
+.join-group-page h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 14px;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #F7F4FF, #A855F7);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Description */
+.join-group-page p {
+  max-width: 420px;
+  color: #B9B2CC;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+/* Form card */
+.join-group-page form {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 32px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 24px;
+  background: rgba(25, 17, 48, 0.85);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.25),
+    0 0 35px rgba(114, 0, 255, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+/* Invitation code input */
+.join-group-page input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px 18px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  outline: none;
+  background: #100B24;
+  color: #F7F4FF;
+  font-size: 1rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.join-group-page input::placeholder {
+  color: #817895;
+}
+
+.join-group-page input:focus {
+  border-color: #A855F7;
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.12);
+}
+
+/* Join button */
+.join-group-page button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #7200FF, #A855F7);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.join-group-page button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(114, 0, 255, 0.3);
+}
+
+.join-group-page button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.join-group-page button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mobile layout */
+@media (max-width: 480px) {
+  .join-group-page {
+    padding: 30px 16px;
+  }
+
+  .join-group-page form {
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
+}
+
+/* Accessibility: reduce motion when requested */
+@media (prefers-reduced-motion: reduce) {
+  .join-group-page input,
+  .join-group-page button {
+    transition: none;
+  }
+}

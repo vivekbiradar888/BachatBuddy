@@ -322,6 +322,11 @@ const topCategory = categorySummary[0]
           <Link to="/budget" className="dashboard-action">
             My Budget <span>↗</span>
           </Link>
+
+            <Link to="/groups" className="dashboard-action">
+    Groups <span>↗</span>
+  </Link>
+
         </div>
       </section>
 

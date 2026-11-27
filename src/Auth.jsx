@@ -14,6 +14,7 @@ function Auth() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -40,7 +41,9 @@ function Auth() {
 
        if (error) throw error
 
-       navigate('/dashboard')
+       navigate(location.state?.from?.pathname || '/dashboard', {
+  replace: true,
+})
       } else {
         const { data, error } = await supabase.auth.signUp({
           email: email.trim(),
@@ -151,17 +154,47 @@ function Auth() {
               />
             </label>
 
-            <label>
-              Password
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                minLength={8}
-                required
-              />
-            </label>
+           
+<label>
+  Password
+
+  <div className="password-field">
+    <input
+      type={showPassword ? 'text' : 'password'}
+      placeholder="Enter your password"
+      value={password}
+      onChange={(event) => setPassword(event.target.value)}
+      minLength={8}
+      required
+    />
+
+    <button
+      type="button"
+      className="password-toggle"
+      onClick={() => setShowPassword(!showPassword)}
+      aria-label={showPassword ? 'Hide password' : 'Show password'}
+      aria-pressed={showPassword}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+        <circle cx="12" cy="12" r="3" />
+
+        {showPassword && (
+          <path d="M3 3l18 18" />
+        )}
+      </svg>
+    </button>
+  </div>
+</label>
+
 
             {isLogin && (
               <a href="#" className="forgot-password">
