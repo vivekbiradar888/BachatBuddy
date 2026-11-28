@@ -32,10 +32,10 @@
 }
 
 .budget-back {
-  display: inline-flex;
+  display: inline-block;
   align-items: center;
   gap: 9px;
-  color: #b9b2cc;
+  color: #B9B2cc;
   text-decoration: none;
   font-size: 14px;
   transition: color 0.2s ease;
@@ -43,6 +43,7 @@
 
 .budget-back:hover {
   color: #c6ff00;
+  transform: translateX(-4px);
 }
 
 .budget-back span {

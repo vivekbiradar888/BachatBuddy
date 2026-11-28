@@ -387,3 +387,22 @@
     flex: 1;
   }
 }
+
+.groups-back-link {
+  display: inline-block;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 25px;
+
+  color: #B9B2CC;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: color 0.2s ease;
+}
+
+.groups-back-link:hover {
+  color: #C6FF00;
+   transform: translateX(-4px);
+}
