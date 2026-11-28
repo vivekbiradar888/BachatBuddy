@@ -2,7 +2,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './supabase.js'
+import PageLoader from './PageLoader.jsx'
 import './Groups.css'
+
 
 function Groups() {
   const [groups, setGroups] = useState([])
@@ -70,6 +72,9 @@ if (membershipsError) {
 
   return (
     <div className="groups-page">
+      <Link to="/dashboard" className="groups-back-link">
+  ← Dashboard
+</Link>
       <header className="groups-header">
         <div>
           <p className="groups-eyebrow">
@@ -103,12 +108,8 @@ if (membershipsError) {
 
       </header>
 
-      {loading ? (
-        <section className="groups-empty-state">
-          <div className="groups-empty-icon">✦</div>
-          <h2>Loading your groups...</h2>
-          <p>Your shared space is getting ready.</p>
-        </section>
+     {loading ? (
+  <PageLoader message="Loading your groups..." />
       ) : error ? (
         <section className="groups-empty-state">
           <div className="groups-empty-icon">!</div>
